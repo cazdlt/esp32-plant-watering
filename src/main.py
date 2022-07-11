@@ -1,3 +1,3 @@
-from app.apps import App, run_app
+from app.apps import run_app
 
-run_app(App.BLYNK)
+run_app("blynk")

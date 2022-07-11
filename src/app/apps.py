@@ -1,13 +1,10 @@
 from . import mqtt, blynk
-from enum import Enum, auto
 
-class App(Enum):
-    BLYNK = auto()
-    MQTT = auto()
 
-def run_app(app: App):
+def run_app(app: str):
     apps = {
-        App.BLYNK: blynk.main,
-        App.MQTT: mqtt.main,
+        "blynk": blynk.main,
+        "mqtt": mqtt.main,
     }
+    assert app in apps.keys(), f"{app} is not a valid app"
     return apps[app]()

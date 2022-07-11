@@ -1,6 +1,7 @@
 import network
-import webrepl
 import upip
+import webrepl
+
 import config
 
 
@@ -16,8 +17,13 @@ def connect(ssid, pwd):
     print("network ifconfig:", sta_if.ifconfig())
     print("hostname:", sta_if.config("dhcp_hostname"))
 
-#def install_requirements():
-#    upip.install(module, str(target))
+
+def install_requirements():
+    upip.debug = False
+    packages = []
+    upip.install(packages)
+
 
 connect(config.WLAN_SSID, config.WLAN_PASSWORD)
+install_requirements()
 webrepl.start()
