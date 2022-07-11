@@ -1,0 +1,16 @@
+IDEAS
+- HomeAssistant>
+    - Hosteado en un RaspberryPi
+    - multiples ESP32 envian data sensor a RPi por MQTT
+    - cada ESP con su propia bomba. 
+    - HA permite mostrar data y activar bomba.
+- Broker:
+    - Puede ser RPi
+    - recibe data MQTT de multiples ESP32 con sensores
+    - Cada ESP tiene su bomba
+    - backend cloud recibe data de broker a traves de HTTP (croneado desde backend) y lo guarda en db
+    - frontend cloud muestra data y permita activar bomba
+    - estado de cada esp se guarda en db
+    - periodicamente se lee estado en broker desde db y se actualiza en esp correspondiente por MQTT
+- Blynk
+    - micropy install blynklib (https://github.com/blynkkk/lib-python)
