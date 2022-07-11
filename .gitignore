@@ -146,3 +146,5 @@ dmypy.json
 !micropy.json
 !src/lib
 
+src/config.py
+

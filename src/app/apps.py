@@ -1,4 +1,4 @@
-import mqtt, blynk
+from . import mqtt, blynk
 from enum import Enum, auto
 
 class App(Enum):
