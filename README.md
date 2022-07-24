@@ -14,3 +14,4 @@ IDEAS
     - periodicamente se lee estado en broker desde db y se actualiza en esp correspondiente por MQTT
 - Blynk
     - micropy install blynklib (https://github.com/blynkkk/lib-python)
+    - Descargar blynklib_mp a ./lib/

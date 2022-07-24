@@ -21,7 +21,9 @@ def connect(ssid, pwd):
 def install_requirements():
     upip.debug = False
     packages = []
+    print("Installing dependencies:", packages)
     upip.install(packages)
+    print("Finished installing dependencies")
 
 
 connect(config.WLAN_SSID, config.WLAN_PASSWORD)
