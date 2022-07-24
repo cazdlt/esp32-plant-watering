@@ -58,7 +58,6 @@ def callback(topic: bytes, message: bytes):
 
 
 def get_measurements(sensor: dht.DHT11):
-
     try:
         sensor.measure()
         humidity = sensor.humidity()
@@ -70,7 +69,6 @@ def get_measurements(sensor: dht.DHT11):
 
 
 def publish_measurements(sensor: dht.DHT11, mqtt: MQTTClient) -> None:
-
     print("Reading sensor data...")
     humidity, temperature = get_measurements(sensor)
 
@@ -90,13 +88,11 @@ def subscribe_to_topics(mqtt: MQTTClient, topics: list[str], callback):
 
 
 def initialize_sensor():
-
     sensor = dht.DHT11(sensor_pin)
     return sensor
 
 
 def main():
-
     print("Starting!!")
     sensor = initialize_sensor()
 
