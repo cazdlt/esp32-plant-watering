@@ -8,9 +8,7 @@
         "black": "*",
         "click": "*"
     },
-    "packages": {
-        "blynklib": "*"
-    },
+    "packages": {},
     "config": {
         "vscode": true,
         "pylint": true
