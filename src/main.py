@@ -1,3 +1,3 @@
 from app.apps import run_app
 
-run_app("blynk")
+run_app("mqtt")

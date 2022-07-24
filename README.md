@@ -15,3 +15,4 @@ IDEAS
 - Blynk
     - micropy install blynklib (https://github.com/blynkkk/lib-python)
     - Descargar blynklib_mp a ./lib/
+    - NUNCA SIRVIÓ
