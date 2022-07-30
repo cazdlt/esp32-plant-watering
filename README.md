@@ -1,6 +1,6 @@
 IDEAS
 - HomeAssistant:
-    - Hosteado en un RaspberryPi
+    - Hosteado en un RaspberryPi (pruebas en Mac)
     - multiples ESP32 envian data sensor a RPi por MQTT
     - cada ESP con su propia bomba
     - HA permite mostrar data y activar bomba
@@ -18,9 +18,9 @@ IDEAS
     - Hay un broker+backend en la nube
     - comunica con esp32 a través de mqtt
     - cada esp envía data de sensor a topic relevante
-    - guarda en db (timescale/influx/quest)
-    - front puede enviar señal de regar agua a través de mqtt
-    - eventualmente broker puede ser el RPi y comunicar con rabbit/kafka al backend
+    - guarda en db (timescale)
+    - front con dashboard (grafana/react) puede enviar señal de regar agua a través de mqtt
+    - eventualmente broker puede ser el RPi y comunicar con rabbit/kafka al backend 
 - AWS / Azure IOT
     - no es tan divertido
     - más similar a lo que se podría hacer en la industria
