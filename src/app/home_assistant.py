@@ -3,6 +3,7 @@ import time
 import dht
 import lib.home_assistant as ha
 from lib.mqtt_manager import MQTTManager
+from lib.sensor import SensorProtocol
 from machine import Pin
 
 # Device config
@@ -14,37 +15,38 @@ MQTT_CLIENT_NAME = DEVICE_NAME
 MQTT_BROKER_ADDR = "192.168.1.20"
 
 # Topics
-topic_sensors = f"home/{DEVICE_NAME}/sensors"
-topic_led = f"home/{DEVICE_NAME}/actuator/led"
-topic_health_check = f"home/{DEVICE_NAME}/health_check"
+BASE_TOPIC = "home"
+topic_sensors = f"{BASE_TOPIC}/{DEVICE_NAME}/sensors"
+topic_led = f"{BASE_TOPIC}/{DEVICE_NAME}/actuator/led"
+topic_health_check = f"{BASE_TOPIC}/{DEVICE_NAME}/health_check"
 
 # Pins
 SENSOR_PIN_NUMBER = 4
-sensor_pin = Pin(SENSOR_PIN_NUMBER, Pin.IN, Pin.PULL_UP)
-led_pin = Pin(2, Pin.OUT)
+LED_PIN_NUMBER = 2
+led_pin = Pin(LED_PIN_NUMBER, Pin.OUT)
 
 
-def initialize_sensor():
-    sensor = dht.DHT11(sensor_pin)
-    return sensor
+class DHT11Sensor(SensorProtocol):
+    def __init__(self):
+        sensor_pin = Pin(SENSOR_PIN_NUMBER, Pin.IN, Pin.PULL_UP)
+        self.sensor = dht.DHT11(sensor_pin)
 
+    def get_measurements(self) -> dict:
+        try:
+            self.sensor.measure()
+            humidity = self.sensor.humidity()
+            temperature = self.sensor.temperature()
+        except Exception as e:  # type: ignore
+            print("Error while reading sensor measurements", e)
+            raise Exception("Error while reading DHT measurements")  # type: ignore
 
-def get_measurements(sensor: dht.DHT11):
-    try:
-        sensor.measure()
-        humidity = sensor.humidity()
-        temperature = sensor.temperature()
-    except Exception as e:  # type: ignore
-        print("Error while reading sensor measurements", e)
-        raise Exception("Error while reading DHT measurements")  # type: ignore
-
-    return {"humidity": humidity, "temperature": temperature}
+        return {"humidity": humidity, "temperature": temperature}
 
 
 def main():
     print("Starting!!")
 
-    sensor = initialize_sensor()
+    sensor = DHT11Sensor()
 
     temp = ha.Sensor(
         device_id=DEVICE_NAME,
@@ -63,7 +65,7 @@ def main():
     sensors = ha.MultiSensor(
         (temp, hum),
         state_topic=topic_sensors,
-        get_measurements_fn=lambda: get_measurements(sensor),
+        sensor=sensor,
     )
 
     with MQTTManager(MQTT_CLIENT_NAME, MQTT_BROKER_ADDR) as mqtt:
@@ -72,7 +74,7 @@ def main():
         while True:
             print()
             mqtt.check_msg()
-            sensors.send_states(mqtt)
+            sensors.send_states()
             time.sleep(5)
 
 
