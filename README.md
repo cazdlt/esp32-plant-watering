@@ -1,10 +1,15 @@
 IDEAS
 - HomeAssistant:
     - Hosteado en un RaspberryPi (pruebas en Mac)
-    - multiples ESP32 envian data sensor a RPi por MQTT
+    - multiples ESP32 envian data sensor a RPi por MQTT (ESPHome?)
     - cada ESP con su propia bomba
     - HA permite mostrar data y activar bomba
+    - HA tiene automatizada la acción de la bomba
     - no usado porque aunque hay un RPi0 disponible, no se están consiguiendo más actualmente
+    - ventajas:
+        - menos trabajo de front
+        - permite integrar cámaras/switches/otras cosas
+        - permite integrar con alexa/etc...
 - Broker:
     - Puede ser RPi
     - recibe data MQTT de multiples ESP32 con sensores
