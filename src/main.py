@@ -1,3 +1,3 @@
 from app.apps import run_app
 
-run_app("mqtt")
+run_app("ha")
