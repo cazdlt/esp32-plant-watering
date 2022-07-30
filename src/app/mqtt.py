@@ -52,7 +52,7 @@ def callback(topic: bytes, message: bytes):
             topic_health_check: health_check_callback,
         }
         topic_callbacks[topic](message)
-    except KeyError:
+    except KeyError: # type: ignore
         print("Unknown action for topic", topic)
         print("Message:", message)
 
@@ -62,7 +62,7 @@ def get_measurements(sensor: dht.DHT11):
         sensor.measure()
         humidity = sensor.humidity()
         temperature = sensor.temperature()
-    except Exception as e:
+    except Exception as e: # type: ignore
         print("Error while reading sensor measurements", e)
         humidity = temperature = -1
     return humidity, temperature
