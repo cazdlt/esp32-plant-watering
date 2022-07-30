@@ -1,9 +1,10 @@
 import time
 
 import dht
-from machine import Pin
-from lib.mqtt_manager import MQTTManager
 import lib.home_assistant as ha
+from lib.mqtt_manager import MQTTManager
+from machine import Pin
+
 # Device config
 DEVICE_ID = 0
 DEVICE_NAME = f"esp{DEVICE_ID}"
@@ -21,6 +22,7 @@ topic_health_check = f"home/{DEVICE_NAME}/health_check"
 SENSOR_PIN_NUMBER = 4
 sensor_pin = Pin(SENSOR_PIN_NUMBER, Pin.IN, Pin.PULL_UP)
 led_pin = Pin(2, Pin.OUT)
+
 
 def initialize_sensor():
     sensor = dht.DHT11(sensor_pin)

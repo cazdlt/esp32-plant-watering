@@ -1,8 +1,8 @@
 import time
 
 import dht
-from machine import Pin
 from lib.mqtt_manager import MQTTManager
+from machine import Pin
 from umqtt.simple import MQTTClient
 
 # Device config
@@ -52,7 +52,7 @@ def callback(topic: bytes, message: bytes):
             topic_health_check: health_check_callback,
         }
         topic_callbacks[topic](message)
-    except KeyError: # type: ignore
+    except KeyError:  # type: ignore
         print("Unknown action for topic", topic)
         print("Message:", message)
 
@@ -62,7 +62,7 @@ def get_measurements(sensor: dht.DHT11):
         sensor.measure()
         humidity = sensor.humidity()
         temperature = sensor.temperature()
-    except Exception as e: # type: ignore
+    except Exception as e:  # type: ignore
         print("Error while reading sensor measurements", e)
         humidity = temperature = -1
     return humidity, temperature

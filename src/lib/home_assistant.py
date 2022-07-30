@@ -1,8 +1,9 @@
-from umqtt.simple import MQTTClient
 import json
 
+from umqtt.simple import MQTTClient
 
 HA_BASE = "homeassistant"
+
 
 class Entity:
     def __init__(self, device_id: str, component_type: str, name: str):
@@ -75,7 +76,7 @@ class Sensor(Entity):
 
         if self.value_attribute is not None:
             message["value_template"] = self.value_template
-        
+
         if self.unit_of_measurement is not None:
             message["unit_of_measurement"] = self.unit_of_measurement
 
