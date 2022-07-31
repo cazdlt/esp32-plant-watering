@@ -32,8 +32,8 @@ class Entity:
 
     def initialize(self, mqtt: MQTTClient):
         self.mqtt = mqtt
-        self.notify_status()
         self.send_discovery_message()
+        self.notify_status()
 
     def send_discovery_message(self):
         pass
