@@ -1,8 +1,7 @@
 import json
 
-
+from lib.models import SensorProtocol, SwitchProtocol
 from lib.mqtt_manager import MQTTHelper
-from lib.models import SensorProtocol
 
 HA_BASE = "homeassistant"
 
@@ -37,7 +36,6 @@ class Entity:
         self.send_discovery_message()
         self.notify_status()
         self.subscribe_to_command_topic()
-        
 
     def subscribe_to_command_topic(self):
         if self.command_topic is not None and self.command_callback is not None:
@@ -133,3 +131,60 @@ class MultiSensor:
         print("Sending measurements:", measurements, "to", self.state_topic)
         self.update_sensors_status("online")
         self.mqtt.publish(self.state_topic, json.dumps(measurements))
+
+
+class Switch(Entity):
+    def __init__(
+        self,
+        device_id: str,
+        name: str,
+        state_topic: str,
+        command_topic: str,
+        switch: SwitchProtocol,
+        value_attribute: str = None,
+        device_class: str = "switch",
+        payload_off: str = "OFF",
+        payload_on: str = "ON",
+    ):
+        super().__init__(device_id, "switch", name)
+        self.device_class = device_class
+        self.state_topic = state_topic
+        self.command_topic = command_topic
+        self.payload_off = payload_off
+        self.payload_on = payload_on
+        self.switch = switch
+        self.command_callback = self.switch.callback
+        self.value_attribute = value_attribute
+        self.switch.register(self)
+
+    def initialize(self, mqtt: MQTTHelper):
+        super().initialize(mqtt)
+        self.notify_state(self.switch.state)
+
+    def notify_state(self, new_state):
+        print(f"Notifying {self.unique_id} state as {new_state}")
+        self.mqtt.publish(self.state_topic, new_state)
+
+    @property
+    def value_template(self):
+        return f"{{{{ value_json.{self.value_attribute} }}}}"
+
+    def send_discovery_message(self):
+        assert self.state_topic is not None, "no state topic specified"
+        message = {
+            "name": self.name,
+            "device_class": self.device_class,
+            "object_id": self.object_id,
+            "state_topic": self.state_topic,
+            "command_topic": self.command_topic,
+            "unique_id": self.unique_id,
+            "availability_topic": self.availability_topic,
+            "payload_off": self.payload_off,
+            "payload_on": self.payload_on,
+        }
+
+        if self.value_attribute is not None:
+            message["value_template"] = self.value_template
+
+        print("Sending discovery message:", message, "to", self.discovery_topic)
+        self.mqtt.publish(self.discovery_topic, json.dumps(message), retain=True)
