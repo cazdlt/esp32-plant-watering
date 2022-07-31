@@ -1,7 +1,7 @@
 import json
 
-from umqtt.simple import MQTTClient
 
+from lib.mqtt_manager import MQTTHelper
 from lib.models import SensorProtocol
 
 HA_BASE = "homeassistant"
@@ -18,6 +18,8 @@ class Entity:
         self.availability_topic = f"{self.base_topic}/status"
         self._status = "online"
         self.mqtt = None
+        self.command_topic = None
+        self.command_callback = None
 
     @property
     def status(self):
@@ -30,10 +32,16 @@ class Entity:
         if old_status != new_status:
             self.notify_status()
 
-    def initialize(self, mqtt: MQTTClient):
+    def initialize(self, mqtt: MQTTHelper):
         self.mqtt = mqtt
         self.send_discovery_message()
         self.notify_status()
+        self.subscribe_to_command_topic()
+        
+
+    def subscribe_to_command_topic(self):
+        if self.command_topic is not None and self.command_callback is not None:
+            self.mqtt.subscribe_with_callback(self.command_topic, self.command_callback)
 
     def send_discovery_message(self):
         pass
@@ -105,7 +113,7 @@ class MultiSensor:
         self.state_topic = state_topic
         self.mqtt = None
 
-    def initialize(self, mqtt: MQTTClient):
+    def initialize(self, mqtt: MQTTHelper):
         self.mqtt = mqtt
         for sensor in self.ha_sensors:
             sensor.state_topic = self.state_topic

@@ -46,7 +46,7 @@ Crear un sistema que:
 
 ## TODO
 - Last Will y aviso de desconexión del nodo para avisar no disponible a HA
-- Añadir actuador
+- Usar timers diferentes para check_msg y loop de sensores
 - Conseguir y configurar Raspberry Pi
 - Usar postgres/timescaledb para medidas a "largo" plazo (1 mes)
 - Dashboard grafana con estas medidas
