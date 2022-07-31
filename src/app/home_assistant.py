@@ -114,8 +114,6 @@ def main():
             check_message_timer.init(period=100, callback=lambda _: mqtt.check_msg())
             while True:
                 pass
-        except Exception as e:  # type: ignore
-            print(e)
         finally:
             print("deactivating timers")
             sensor_timer.deinit()
