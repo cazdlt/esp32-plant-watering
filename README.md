@@ -45,13 +45,14 @@ Crear un sistema que:
     - NUNCA SIRVIÓ
 
 ## TODO
-- Last Will y aviso de desconexión del nodo para avisar no disponible a HA
 - Probar ESPHome
-- Conseguir y configurar Raspberry Pi
-- Usar postgres/timescaledb para medidas a "largo" plazo (1 mes)
-- Dashboard grafana con estas medidas
+- Last Will y aviso de desconexión del nodo para avisar no disponible a HA
 - Configurar sensor de humedad de suelo
 - Montar sistema de regado
 - Usar baterías (y medir nivel de batería?) (o fuente)
+- Configurar acceso remoto de HA
+- Usar postgres/timescaledb para medidas a "largo" plazo (1 mes)
+- Dashboard grafana con estas medidas
+- Conseguir y configurar Raspberry Pi
 - Diseñar PCB
-- DIseñar casing
+- Diseñar casing
