@@ -45,8 +45,7 @@ Crear un sistema que:
     - NUNCA SIRVIÓ
 
 ## TODO
-- Last Will de conexión del nodo para avisar no disponible
-- Manejar texto UTF8 en MQTT
+- Last Will y aviso de desconexión del nodo para avisar no disponible a HA
 - Añadir actuador
 - Conseguir y configurar Raspberry Pi
 - Usar postgres/timescaledb para medidas a "largo" plazo (1 mes)
