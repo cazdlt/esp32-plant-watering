@@ -2,7 +2,7 @@ import json
 
 from umqtt.simple import MQTTClient
 
-from lib.sensor import SensorProtocol
+from lib.models import SensorProtocol
 
 HA_BASE = "homeassistant"
 
