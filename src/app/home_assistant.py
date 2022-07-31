@@ -1,10 +1,8 @@
-import time
-
 import dht
 import lib.home_assistant as ha
 from lib.models import SensorProtocol, SwitchProtocol
 from lib.mqtt_manager import MQTTManager
-from machine import Pin
+from machine import Pin, Timer
 
 # Device config
 DEVICE_ID = 0
@@ -48,21 +46,17 @@ class Led(SwitchProtocol):
         self.pin = Pin(LED_PIN_NUMBER, Pin.OUT)
 
     @property
-    def state(self):
+    def state(self) -> str:
         return str(self.pin.value())
 
     @state.setter
-    def state(self, new_state):
-        old_state = self.pin.value()
-        self.pin.value(new_state)
-        new_state = self.pin.value()
-        if new_state != old_state:
-            self.notify_state(self.state)
+    def state(self, new_state: str):
+        self.pin.value(int(new_state))
 
     def callback(self, message):
         try:
             print("Setting LED to", message)
-            self.state = int(message)
+            self.state = message
         except ValueError:  # type: ignore
             self.notify_state(self.state)
             print(f"Failed setting {message} as LED state, check that it is valid.")
@@ -104,6 +98,9 @@ def main():
         switch=led,
     )
 
+    sensor_timer = Timer(0)
+    check_message_timer = Timer(1)
+
     with MQTTManager(MQTT_CLIENT_NAME, MQTT_BROKER_ADDR) as mqtt:
 
         print("initializing")
@@ -111,11 +108,22 @@ def main():
         ha_led.initialize(mqtt)
         print("finished initializing")
 
-        print("starting main loop")
-        while True:
-            mqtt.check_msg()
-            sensors.send_states()
-            time.sleep(5)
+        try:
+            print("initializing timers")
+            sensor_timer.init(period=5000, callback=lambda _: sensors.send_states())
+            check_message_timer.init(period=100, callback=lambda _: mqtt.check_msg())
+            while True:
+                pass
+        except Exception as e:  # type: ignore
+            print(e)
+        finally:
+            print("deactivating timers")
+            sensor_timer.deinit()
+            check_message_timer.deinit()
+
+            print("deactivating entities")
+            sensors.update_sensors_status("offline")
+            ha_led.status = "offline"
 
 
 if __name__ == "__main__":
